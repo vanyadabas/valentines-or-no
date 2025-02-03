@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            text-align: center;
+            background: #ffcccc;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+            margin-top: 20px;
+            position: relative;
+        }
+        .button {
+            background: pink;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10px;
+            position: absolute;
+            transition: transform 0.3s;
+        }
+        #yes {
+            left: 0;
+        }
+        #no {
+            right: 0;
+        }
+        .heart {
+            position: absolute;
+            width: 180px;
+            height: 150px;
+            background: rgba(255, 105, 180, 0.6);
+            clip-path: path("M 20,40 A 20,20 0 0,1 60,40 A 20,20 0 0,1 100,40 Q 100,80 60,120 Q 20,80 20,40 Z");
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0% {
+                transform: translate(var(--start-x), var(--start-y)) scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--end-x), var(--end-y)) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <h1>will u be my valentine? :p</h1>
+        <div class="buttons">
+            <button id="yes" class="button" onclick="yesClicked()">Yes</button>
+            <button id="no" class="button" onclick="moveNo()">No</button>
+        </div>
+    </div>
+
+    <script>
+        function moveNo() {
+            let noButton = document.getElementById("no");
+            let maxX = window.innerWidth * 0.4;
+            let maxY = window.innerHeight * 0.4;
+            let newX = (Math.random() - 0.5) * maxX;
+            let newY = (Math.random() - 0.5) * maxY;
+            noButton.style.transform = `translate(${newX}px, ${newY}px)`;
+        }
+        function yesClicked() {
+            document.getElementById("mainContainer").innerHTML = "<h1 style='font-size: 50px; color: #ff69b4; text-align: center;'>YAYYYY :D </h1>";
+        }
+        function createHeart() {
+            let heart = document.createElement("div");
+            heart.className = "heart";
+            let startX = Math.random() * 100 + "vw";
+            let startY = Math.random() * 100 + "vh";
+            let endX = (Math.random() * 200 - 100) + "vw";
+            let endY = (Math.random() * -200 - 100) + "vh";
+            heart.style.setProperty('--start-x', startX);
+            heart.style.setProperty('--start-y', startY);
+            heart.style.setProperty('--end-x', endX);
+            heart.style.setProperty('--end-y', endY);
+            heart.style.animationDuration = Math.random() * 5 + 5 + "s";
+            heart.style.left = Math.random() * window.innerWidth + "px";
+            heart.style.top = Math.random() * window.innerHeight + "px";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 10000);
+        }
+        setInterval(createHeart, 1000);
+    </script>
+</body>
+</html>
