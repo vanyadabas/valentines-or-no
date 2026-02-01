@@ -17,19 +17,22 @@
             overflow: hidden;
             position: relative;
         }
+
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
-            z-index: 1;
+            z-index: 5;
         }
+
         .buttons {
             width: 300px;
+            height: 60px;
             margin-top: 20px;
             position: relative;
-            height: 60px;
         }
+
         .button {
             background: pink;
             border: none;
@@ -38,16 +41,23 @@
             cursor: pointer;
             border-radius: 10px;
             position: fixed;
+        }
+
+        #yes {
+            left: 50%;
+            top: 50%;
+            transform: translate(-120px, 40px);
+            z-index: 10;
+        }
+
+        #no {
+            left: 50%;
+            top: 50%;
+            transform: translate(40px, 40px);
+            z-index: 20;
             transition: left 0.25s ease, top 0.25s ease;
         }
-        #yes {
-            left: calc(50% - 140px);
-            top: calc(50% + 40px);
-        }
-        #no {
-            left: calc(50% + 40px);
-            top: calc(50% + 40px);
-        }
+
         .heart {
             position: absolute;
             width: 180px;
@@ -57,6 +67,7 @@
             animation: float linear infinite;
             pointer-events: none;
         }
+
         @keyframes float {
             0% {
                 transform: translate(var(--start-x), var(--start-y)) scale(0.8);
@@ -70,30 +81,50 @@
     </style>
 </head>
 <body>
+
     <div class="container" id="mainContainer">
         <h1>will u be my valentine? :p</h1>
-        <div class="buttons"></div>
     </div>
 
     <button id="yes" class="button" onclick="yesClicked()">yes</button>
-    <button id="no" class="button" onmouseenter="moveNo()">no</button>
+    <button id="no" class="button">no</button>
 
     <script>
-        function moveNo() {
-            const noButton = document.getElementById("no");
-            const padding = 20;
+        const noButton = document.getElementById("no");
+        const yesButton = document.getElementById("yes");
 
+        function moveNo() {
+            const padding = 20;
             const maxX = window.innerWidth - noButton.offsetWidth - padding;
             const maxY = window.innerHeight - noButton.offsetHeight - padding;
 
-            const newX = Math.random() * maxX;
-            const newY = Math.random() * maxY;
+            let x, y, safe;
 
-            noButton.style.left = newX + "px";
-            noButton.style.top = newY + "px";
+            do {
+                x = Math.random() * maxX;
+                y = Math.random() * maxY;
+
+                const yesRect = yesButton.getBoundingClientRect();
+                safe = Math.hypot(x - yesRect.left, y - yesRect.top) > 120;
+            } while (!safe);
+
+            noButton.style.left = x + "px";
+            noButton.style.top = y + "px";
         }
 
+        document.addEventListener("mousemove", (e) => {
+            const rect = noButton.getBoundingClientRect();
+            const dx = Math.abs(e.clientX - (rect.left + rect.width / 2));
+            const dy = Math.abs(e.clientY - (rect.top + rect.height / 2));
+
+            if (dx < 100 && dy < 100) {
+                moveNo();
+            }
+        });
+
         function yesClicked() {
+            yesButton.remove();
+            noButton.remove();
             document.getElementById("mainContainer").innerHTML =
                 "<h1 style='font-size:50px;color:#ff69b4;'>YAYYYY :D</h1>";
         }
