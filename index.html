@@ -54,14 +54,15 @@
             background: rgba(255, 105, 180, 0.6);
             clip-path: path("M 20,40 A 20,20 0 0,1 60,40 A 20,20 0 0,1 100,40 Q 100,80 60,120 Q 20,80 20,40 Z");
             animation: float linear infinite;
+            pointer-events: none;
         }
         @keyframes float {
             0% {
-                transform: translate(var(--start-x), var(--start-y)) scale(0.8);
+                transform: translate(var(--start-x), var(--start-y)) scale(var(--scale)) rotate(var(--rotate));
                 opacity: 1;
             }
             100% {
-                transform: translate(var(--end-x), var(--end-y)) scale(1.2);
+                transform: translate(var(--end-x), var(--end-y)) scale(var(--scale)) rotate(var(--rotate));
                 opacity: 0;
             }
         }
@@ -85,27 +86,45 @@
             let newY = (Math.random() - 0.5) * maxY;
             noButton.style.transform = `translate(${newX}px, ${newY}px)`;
         }
+
         function yesClicked() {
-            document.getElementById("mainContainer").innerHTML = "<h1 style='font-size: 50px; color: #ff69b4; text-align: center;'>YAYYYY :D </h1>";
+            document.getElementById("mainContainer").innerHTML =
+                "<h1 style='font-size:50px;color:#ff69b4;'>YAYYYY :D</h1>";
         }
+
         function createHeart() {
             let heart = document.createElement("div");
             heart.className = "heart";
+
             let startX = Math.random() * window.innerWidth;
             let startY = window.innerHeight + 50;
+
             let driftX = (Math.random() - 0.5) * 300;
             let driftY = -window.innerHeight - Math.random() * 200;
+
+            let scale = Math.random() * 0.5 + 0.6;
+            let rotate = Math.random() * 30 - 15 + "deg";
+
             heart.style.left = startX + "px";
             heart.style.top = startY + "px";
+
             heart.style.setProperty("--start-x", "0px");
             heart.style.setProperty("--start-y", "0px");
             heart.style.setProperty("--end-x", driftX + "px");
             heart.style.setProperty("--end-y", driftY + "px");
+            heart.style.setProperty("--scale", scale);
+            heart.style.setProperty("--rotate", rotate);
+
             heart.style.animationDuration = Math.random() * 4 + 6 + "s";
+
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 10000);
         }
-        setInterval(createHeart, 1000);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            for (let i = 0; i < 6; i++) createHeart();
+            setInterval(createHeart, 900);
+        });
     </script>
 </body>
 </html>
